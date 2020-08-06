@@ -11,7 +11,14 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
+initial_extensions = ['cogs.help']
+
 client = commands.Bot(command_prefix = '$')
+client.remove_command('help')
+
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        client.load_extension(extension)
 
 @client.event
 async def on_ready():
