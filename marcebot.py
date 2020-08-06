@@ -8,10 +8,12 @@ client = commands.Bot(command_prefix = '$')
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
+#gets the client latency
 @client.command()
 async def ping(ctx):
     await ctx.send(f'Pong! ({round(client.latency * 1000)}ms)')
 
+#8ball command
 @client.command(aliases=['8ball'])
 async def _8ball(ctx, *, question):
     responses = ['It is certain.',
@@ -36,6 +38,11 @@ async def _8ball(ctx, *, question):
     await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
 
 @client.command()
+async def roll(ctx):
+    num = random.randint(1, 100)
+    await ctx.send(f'{num}')
+
+@client.command()
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
@@ -50,17 +57,17 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 @client.command()
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, *, member):
-    banned_users = await ctx.guild.bans()
-    member_name, member_discriminator = member.split('#')
+    banned_users = await ctx.guild.bans() #tuple of users that are banned in the server
+    member_name, member_discriminator = member.split('#') #here we split the string into the member name and its
+    #discriminator
 
-    for ban_entry in banned_users:
+    for ban_entry in banned_users: #for every banned user in banned users
         user = ban_entry.user
 
+        #if the banned user is the same user as the argument passed to the function, unban this user
         if (user.name, user.discriminator == member_name, member_discriminator):
             await ctx.guild.unban(user)
             await ctx.send(f'Unbanned {user.name}#{user.discriminator}')
-        else:
-            await ctx.send(f'The user {member_name}#{member_discriminator} is not banned.')
 
-
+#run the bot
 client.run('NzQwNzE5ODUzMDIyODcxNjMz.XytHHg.vRsC3n-f966rGwisAYrwADz4OYE')
