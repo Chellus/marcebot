@@ -22,7 +22,7 @@ class HelpCog(commands.Cog):
                 for y in self.client.walk_commands():
                     if not y.cog_name and not y.hidden:
                         cmd_desc += ('{} - {}'.format(y.name,y.help)+'\n')
-                halp.add_field(name='Uncatergorized Commands',value=cmds_desc[0:len(cmds_desc)-1],inline=False)
+                halp.add_field(name='Uncatergorized Commands',value=cmd_desc[0:len(cmd_desc)-1],inline=False)
                 await ctx.message.add_reaction(emoji='✉')
                 await ctx.message.author.send('',embed=halp)
 
