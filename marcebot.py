@@ -1,6 +1,14 @@
 import discord
 from discord.ext import commands
+from discord.utils import get
 import random
+import logging
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 client = commands.Bot(command_prefix = '$')
 
@@ -41,6 +49,18 @@ async def _8ball(ctx, *, question):
 async def roll(ctx):
     num = random.randint(1, 100)
     await ctx.send(f'{num}')
+
+@client.command(pass_context=True)
+async def play(ctx, *, content=None):
+    global voice
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
 
 @client.command()
 @commands.has_permissions(kick_members=True)
