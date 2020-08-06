@@ -12,7 +12,7 @@ async def on_ready():
 async def ping(ctx):
     await ctx.send(f'Pong! ({round(client.latency * 1000)}ms)')
 
-@client.command(aliases=['8ball']):
+@client.command(aliases=['8ball'])
 async def _8ball(ctx, *, question):
     responses = ['It is certain.',
     'It is decidedly so.',
