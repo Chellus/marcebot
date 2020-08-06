@@ -1,4 +1,5 @@
 import discord
+import os
 from discord.ext import commands
 from discord.utils import get
 import random
@@ -15,6 +16,7 @@ client = commands.Bot(command_prefix = '$')
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+    await client.change_presence(status=discord.Status.idle, activity=discord.Game('test'))
 
 #gets the client latency
 @client.command()
