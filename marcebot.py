@@ -93,11 +93,16 @@ async def atucasa(ctx):
     else:
         voice = await channel.connect()
 
-    voice.play(discord.FFmpegPCMAudio("audio/atucasa.mp3"), after=lambda e: print("Song done!"))
-    voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.07
+    num = random.randint(1, 2)
 
-    await voice.disconnect()
+    if num == 1:
+        voice.play(discord.FFmpegPCMAudio("audio/atucasa1.mp3"), after=lambda e: print("Song done!"))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.07
+    else:
+        voice.play(discord.FFmpegPCMAudio("audio/atucasa2.mp3"), after=lambda e: print("Song done!"))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.07
 
 @client.command(pass_context=True)
 async def humildad(ctx):
