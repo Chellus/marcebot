@@ -70,6 +70,59 @@ async def play(ctx, *, content=None):
     else:
         voice = await channel.connect()
 
+@client.command(pass_context=True)
+async def leave(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.disconnect()
+        print(f'The bot has left {channel}')
+        await ctx.send(f'Left {channel}')
+    else:
+        print('Bot was told to leave voice channel, but was not in one')
+        await ctx.send('Bot is currently not in a voice channel!')
+
+@client.command(pass_context=True)
+async def atucasa(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    voice.play(discord.FFmpegPCMAudio("audio/atucasa.mp3"), after=lambda e: print("Song done!"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+
+    await voice.disconnect()
+
+@client.command(pass_context=True)
+async def humildad(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    num = random.randint(1, 3)
+
+    if num == 1:
+        voice.play(discord.FFmpegPCMAudio("audio/humildad1.mp3"), after=lambda e: print("Song done!"))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.07
+    elif num == 2:
+        voice.play(discord.FFmpegPCMAudio("audio/humildad2.mp3"), after=lambda e: print("Song done!"))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.07
+    elif num == 3:
+        voice.play(discord.FFmpegPCMAudio("audio/humildad3.mp3"), after=lambda e: print("Song done!"))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.07
 
 @client.command()
 @commands.has_permissions(kick_members=True)
