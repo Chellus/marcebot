@@ -3,13 +3,6 @@ import os
 from discord.ext import commands
 from discord.utils import get
 import random
-import logging
-
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
 
 initial_extensions = ['cogs.help']
 
@@ -95,14 +88,9 @@ async def atucasa(ctx):
 
     num = random.randint(1, 2)
 
-    if num == 1:
-        voice.play(discord.FFmpegPCMAudio("audio/atucasa1.mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
-    else:
-        voice.play(discord.FFmpegPCMAudio("audio/atucasa2.mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
+    voice.play(discord.FFmpegPCMAudio("audio/atucasa"+str(num)+".mp3"), after=lambda e: print("Song done!"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
 
 @client.command(pass_context=True)
 async def humildad(ctx):
@@ -116,18 +104,9 @@ async def humildad(ctx):
 
     num = random.randint(1, 3)
 
-    if num == 1:
-        voice.play(discord.FFmpegPCMAudio("audio/humildad1.mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
-    elif num == 2:
-        voice.play(discord.FFmpegPCMAudio("audio/humildad2.mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
-    elif num == 3:
-        voice.play(discord.FFmpegPCMAudio("audio/humildad3.mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
+    voice.play(discord.FFmpegPCMAudio("audio/humildad"+str(num)+".mp3"), after=lambda e: print("Song done!"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
 
 @client.command()
 @commands.has_permissions(kick_members=True)
