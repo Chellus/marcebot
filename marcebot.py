@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord.utils import get
 import random
 
-initial_extensions = ['cogs.help']
+initial_extensions = ['cogs.help', 'cogs.utility']
 
 client = commands.Bot(command_prefix = '$')
 client.remove_command('help')
@@ -17,11 +17,6 @@ if __name__ == '__main__':
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     await client.change_presence(status=discord.Status.idle, activity=discord.Game('test'))
-
-#gets the client latency
-@client.command()
-async def ping(ctx):
-    await ctx.send(f'Pong! ({round(client.latency * 1000)}ms)')
 
 #8ball command
 @client.command(aliases=['8ball'])
@@ -90,7 +85,7 @@ async def atucasa(ctx):
 
     voice.play(discord.FFmpegPCMAudio("audio/atucasa"+str(num)+".mp3"), after=lambda e: print("Song done!"))
     voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.07
+    voice.source.volume = 0.1
 
 @client.command(pass_context=True)
 async def humildad(ctx):
@@ -106,34 +101,7 @@ async def humildad(ctx):
 
     voice.play(discord.FFmpegPCMAudio("audio/humildad"+str(num)+".mp3"), after=lambda e: print("Song done!"))
     voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.07
-
-@client.command()
-@commands.has_permissions(kick_members=True)
-async def kick(ctx, member : discord.Member, *, reason=None):
-    await member.kick(reason=reason)
-    await ctx.send(f'{user} has been kicked succesfully.')
-
-@client.command()
-@commands.has_permissions(ban_members=True)
-async def ban(ctx, member : discord.Member, *, reason=None):
-    await ctx.send(f'{user} has been banned succesfully.')
-    await member.ban(reason=reason)
-
-@client.command()
-@commands.has_permissions(ban_members=True)
-async def unban(ctx, *, member):
-    banned_users = await ctx.guild.bans() #tuple of users that are banned in the server
-    member_name, member_discriminator = member.split('#') #here we split the string into the member name and its
-    #discriminator
-
-    for ban_entry in banned_users: #for every banned user in banned users
-        user = ban_entry.user
-
-        #if the banned user is the same user as the argument passed to the function, unban this user
-        if (user.name, user.discriminator == member_name, member_discriminator):
-            await ctx.guild.unban(user)
-            await ctx.send(f'Unbanned {user.name}#{user.discriminator}')
+    voice.source.volume = 0.1
 
 #run the bot
 client.run('NzQwNzE5ODUzMDIyODcxNjMz.XytHHg.-TYBXPwp2ixH5ljHlrdzKs2CScQ')

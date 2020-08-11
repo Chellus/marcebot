@@ -5,7 +5,7 @@ class HelpCog(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(help="Sends this message.")
     @commands.has_permissions(add_reactions=True,embed_links=True)
     async def help(self, ctx, *cog):
         #Gets all cogs and commands of mine.
