@@ -20,7 +20,7 @@ if __name__ == '__main__':
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    await client.change_presence(status=discord.Status.idle, activity=discord.Game('test'))
+    await client.change_presence(status=discord.Status.idle, activity=discord.Game('$help'))
 
 @client.command(help="Sends a random fact")
 async def randomfact(ctx):
