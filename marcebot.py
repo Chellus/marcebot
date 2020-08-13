@@ -1,10 +1,14 @@
 import discord
 import os
+import json
 from discord.ext import commands
 from discord.utils import get
 import random
 
-initial_extensions = ['cogs.help', 'cogs.utility']
+with open('facts.json', 'r', encoding="utf8") as data:
+    facts = json.load(data)
+
+initial_extensions = ['cogs.help', 'cogs.utility', 'cogs.games']
 
 client = commands.Bot(command_prefix = '$')
 client.remove_command('help')
@@ -18,47 +22,16 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     await client.change_presence(status=discord.Status.idle, activity=discord.Game('test'))
 
-#8ball command
-@client.command(aliases=['8ball'])
-async def _8ball(ctx, *, question):
-    responses = ['It is certain.',
-    'It is decidedly so.',
-    'Without a doubt.',
-    'Yes - definetly',
-    'You may relay on it.',
-    'As i see it, yes.',
-    'Most likely.',
-    'Outlook good.',
-    'Yes.',
-    'Signs point to yes.',
-    'Reply hazy, try again.',
-    'Ask again later.',
-    'Better not tell you now.',
-    'Cannot predict now.',
-    'Do not count on it.',
-    'My reply is no.',
-    'My sources say no.',
-    'Outlook not so good.',
-    'Very doubtful.']
-    await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
+@client.command(help="Sends a random fact")
+async def randomfact(ctx):
+    num = random.randint(1, 50)
 
-@client.command()
-async def roll(ctx):
-    num = random.randint(1, 100)
-    await ctx.send(f'{num}')
+    embed = discord.Embed(title="Random fact number "+str(num)+".",
+    description=facts[str(num)])
 
-@client.command(pass_context=True)
-async def play(ctx, *, content=None):
-    global voice
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
+    await ctx.send('', embed=embed)
 
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        voice = await channel.connect()
-
-@client.command(pass_context=True)
+@client.command(pass_context=True, help="Leaves a voice channel")
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
@@ -66,12 +39,14 @@ async def leave(ctx):
     if voice and voice.is_connected():
         await voice.disconnect()
         print(f'The bot has left {channel}')
-        await ctx.send(f'Left {channel}')
+        message = discord.Embed(description=f"Left {channel} voice channel")
+        await ctx.send('', embed=message)
     else:
         print('Bot was told to leave voice channel, but was not in one')
-        await ctx.send('Bot is currently not in a voice channel!')
+        message = discord.Embed(description=f"Bot is currently not in a voice channel!")
+        await ctx.send('', embed=message)
 
-@client.command(pass_context=True)
+@client.command(pass_context=True, help="Plays a random audio related to atucasa")
 async def atucasa(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
@@ -87,7 +62,7 @@ async def atucasa(ctx):
     voice.source = discord.PCMVolumeTransformer(voice.source)
     voice.source.volume = 0.1
 
-@client.command(pass_context=True)
+@client.command(pass_context=True, help="Plays a random audio related to humildad")
 async def humildad(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
