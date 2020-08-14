@@ -22,7 +22,7 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     await client.change_presence(status=discord.Status.idle, activity=discord.Game('$help'))
 
-@client.command(help="Sends a random fact")
+@client.command(aliases=['fact'],help="Sends a random fact")
 async def randomfact(ctx):
     num = random.randint(1, 50)
 
@@ -50,7 +50,6 @@ async def leave(ctx):
 async def atucasa(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
-    discord.opus.load_opus("libopus")
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
@@ -67,7 +66,6 @@ async def atucasa(ctx):
 async def humildad(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
-    discord.opus.load_opus("libopus")
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
