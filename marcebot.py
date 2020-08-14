@@ -50,6 +50,7 @@ async def leave(ctx):
 async def atucasa(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
+    discord.opus.load_opus("libopus")
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
@@ -66,6 +67,7 @@ async def atucasa(ctx):
 async def humildad(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
+    discord.opus.load_opus("libopus")
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
