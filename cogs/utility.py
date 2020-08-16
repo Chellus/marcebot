@@ -34,5 +34,32 @@ class Utility(commands.Cog):
                 await ctx.guild.unban(user)
                 await ctx.send('', embed=discord.Embed(description=f'Unbanned user {user.name}#{user.discriminator}'))
 
+    @commands.command(help="Mutes a member so that he cannot send messages")
+    @commands.has_permissions(manage_roles=True)
+    async def mute(self, ctx, user : discord.Member, *, reason=None):
+        try:
+            role = discord.utils.get(ctx.guild.roles, name="Muted")
+            await user.add_roles(role)
+            await ctx.send(f'I have muted {user.mention} for the reason: {reason}')
+        except:
+            perms = discord.Permissions(send_messages=False, read_messages=True)
+
+            await ctx.guild.create_role(name="Muted", permissions=perms)
+            await user.add_roles(role)
+            await ctx.send(f'I have muted {user.mention} for the reason: {reason}')
+
+    @commands.command(help="Unmutes a member so that he can send messages again")
+    @commands.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, user : discord.Member):
+        try:
+            role = discord.utils.get(ctx.guild.roles, name="Muted")
+            if role in user.roles:
+                await user.remove_roles(role)
+                await ctx.send(f'Unmuted {user.mention}')
+            else:
+                await ctx.send(f'The user {user.mention} is not muted.')
+        except:
+            await ctx.send(f'The user {user.mention} is not muted.')
+
 def setup(client):
     client.add_cog(Utility(client))
