@@ -22,7 +22,7 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     await client.change_presence(status=discord.Status.idle, activity=discord.Game('$help'))
 
-@client.command(aliases=['fact'],help="Sends a random fact")
+@client.command(help="Sends a random fact")
 async def randomfact(ctx):
     num = random.randint(1, 50)
 
@@ -31,12 +31,13 @@ async def randomfact(ctx):
 
     await ctx.send('', embed=embed)
 
-@client.command()
+@client.command(help="Look something up on the internet")
 async def lmgtfy(ctx, *, search=None): #let me google that for you
     if search == None:
         await ctx.send("I need something to search.")
     else:
-        await ctx.send("https://es.lmgtfy.com/?q="+str(search)+"&pp=1&s=l&iie=1")
+        search = search.replace(" ", "+")
+        await ctx.send("https://es.lmgtfy.com/?q="+search+"&pp=1&s=l&iie=1")
 
 #run the bot
 client.run('NzQwNzE5ODUzMDIyODcxNjMz.XytHHg.-TYBXPwp2ixH5ljHlrdzKs2CScQ')
