@@ -24,6 +24,7 @@ class HelpCog(commands.Cog):
                         cmd_desc += ('{} - {}'.format(y.name,y.help)+'\n')
                 halp.add_field(name='Uncatergorized Commands',value=cmd_desc[0:len(cmd_desc)-1],inline=False)
                 await ctx.message.add_reaction(emoji='✉')
+                await ctx.send('Check DM')
                 await ctx.message.author.send('',embed=halp)
 
             else:

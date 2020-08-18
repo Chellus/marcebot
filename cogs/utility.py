@@ -15,11 +15,21 @@ class Utility(commands.Cog):
         await member.kick(reason=reason)
         await ctx.send('', embed=discord.Embed(description=f'{user} has been kicked succesfully.'))
 
+    @kick.error
+    async def kick_error(ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('I could not find that member')
+
     @commands.command(help="Bans a specific member for an optional reason. It takes two parameters. A server member and an optional reason.")
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member : discord.Member, *, reason=None):
         await member.ban(reason=reason)
         await ctx.send('',embed=discord.Embed(description=f'{user} has been banned succesfully.'))
+
+    @ban.error
+    async def ban_error(ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('I could not find that member')
 
     @commands.command(help="Unban a banned member from the server. It receives a discord user as an input with its discriminator. User#1234")
     @commands.has_permissions(ban_members=True)
@@ -48,6 +58,11 @@ class Utility(commands.Cog):
             await user.add_roles(role)
             await ctx.send(f'I have muted {user.mention} for the reason: {reason}')
 
+    @mute.error
+    async def mute_error(ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('I could not find that member')
+
     @commands.command(help="Unmutes a member so that he can send messages again")
     @commands.has_permissions(manage_roles=True)
     async def unmute(self, ctx, user : discord.Member):
@@ -60,6 +75,11 @@ class Utility(commands.Cog):
                 await ctx.send(f'The user {user.mention} is not muted.')
         except:
             await ctx.send(f'The user {user.mention} is not muted.')
+
+    @unmute.error
+    async def unmute_error(ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('I could not find that member')
 
     @commands.command(aliases=['whois'], help='Get more info about a certain user')
     async def userinfo(self, ctx, member : discord.Member=None):
@@ -82,6 +102,11 @@ class Utility(commands.Cog):
         embed.add_field(name="Bot?:", value=member.bot)
 
         await ctx.send(embed=embed)
+
+    @userinfo.error
+    async def userinfo_error(ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send('I could not find that member')
 
 def setup(client):
     client.add_cog(Utility(client))
