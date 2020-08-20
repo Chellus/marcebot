@@ -6,12 +6,14 @@ import os
 import pyttsx3
 
 engine = pyttsx3.init()
+voice_id = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_PT-BR_MARIA_11.0'
+engine.setProperty('voice', voice_id)
 
 class Audio(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(help="Text to speech. Write something, then the bot joins the voice channel and says it in portuguese")
     async def tts(self, ctx, *, text):
         audio = os.path.isfile("audio/tts.mp3")
 
