@@ -108,5 +108,14 @@ class Utility(commands.Cog):
         if isinstance(error, commands.BadArgument):
             await ctx.send('I could not find that member')
 
+    @commands.command()
+    async def avatar(self, ctx, member : discord.Member=None):
+        if member == None:
+            member = ctx.author
+        embed = discord.Embed(colour=discord.Colour.green())
+        embed.set_thumbnail(url=member.avatar_url)
+
+        await ctx.send(embed=embed)
+
 def setup(client):
     client.add_cog(Utility(client))
