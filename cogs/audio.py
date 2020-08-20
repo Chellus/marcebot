@@ -2,10 +2,42 @@ import random
 import discord
 from discord.ext import commands
 from discord.utils import get
+import os
+import pyttsx3
+
+engine = pyttsx3.init()
 
 class Audio(commands.Cog):
     def __init__(self, client):
         self.client = client
+
+    @commands.command()
+    async def tts(self, ctx, *, text):
+        audio = os.path.isfile("audio/tts.mp3")
+
+        try:
+            if audio:
+                os.remove("audio/tts.mp3")
+                print("Removed old tts file")
+        except PermissionError:
+            print("Trying to delete file but audio is being played")
+            await ctx.send("ERROR: Audio playing")
+            return
+
+        engine.save_to_file(text, "audio/tts.mp3")
+        engine.runAndWait()
+
+        channel = ctx.message.author.voice.channel
+        voice = get(self.client.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_connected():
+            await voice.move_to(channel)
+        else:
+            voice = await channel.connect()
+
+        voice.play(discord.FFmpegPCMAudio("audio/tts.mp3"), after=lambda e: print("TTS done!"))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volumen = 0.1
 
     @commands.command(pass_context=True, help="Plays a random audio related to atucasa")
     async def atucasa(self, ctx):
