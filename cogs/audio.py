@@ -15,18 +15,19 @@ class Audio(commands.Cog):
 
     @commands.command(help="Text to speech. Write something, then the bot joins the voice channel and says it in portuguese")
     async def tts(self, ctx, *, text):
-        audio = os.path.isfile("audio/tts.mp3")
+        guild = str(ctx.message.guild.id)
+        audio = os.path.isfile("audio/tts"+guild+".mp3")
 
         try:
             if audio:
-                os.remove("audio/tts.mp3")
+                os.remove("audio/tts"+guild+".mp3")
                 print("Removed old tts file")
         except PermissionError:
             print("Trying to delete file but audio is being played")
             await ctx.send("ERROR: Audio playing")
             return
 
-        engine.save_to_file(text, "audio/tts.mp3")
+        engine.save_to_file(text, "audio/tts"+guild+".mp3")
         engine.runAndWait()
 
         channel = ctx.message.author.voice.channel
@@ -37,41 +38,9 @@ class Audio(commands.Cog):
         else:
             voice = await channel.connect()
 
-        voice.play(discord.FFmpegPCMAudio("audio/tts.mp3"), after=lambda e: print("TTS done!"))
+        voice.play(discord.FFmpegPCMAudio("audio/tts"+guild+".mp3"), after=lambda e: print("TTS done!"))
         voice.source = discord.PCMVolumeTransformer(voice.source)
         voice.source.volumen = 0.1
-
-    @commands.command(pass_context=True, help="Plays a random audio related to atucasa")
-    async def atucasa(self, ctx):
-        channel = ctx.message.author.voice.channel
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-
-        if voice and voice.is_connected():
-            await voice.move_to(channel)
-        else:
-            voice = await channel.connect()
-
-        num = random.randint(1, 2)
-
-        voice.play(discord.FFmpegPCMAudio("audio/atucasa"+str(num)+".mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.1
-
-    @commands.command(pass_context=True, help="Plays a random audio related to humildad")
-    async def humildad(self, ctx):
-        channel = ctx.message.author.voice.channel
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-
-        if voice and voice.is_connected():
-            await voice.move_to(channel)
-        else:
-            voice = await channel.connect()
-
-        num = random.randint(1, 3)
-
-        voice.play(discord.FFmpegPCMAudio("audio/humildad"+str(num)+".mp3"), after=lambda e: print("Song done!"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.1
 
     @commands.command(pass_context=True, help="Leaves a voice channel")
     async def leave(self, ctx):

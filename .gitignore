@@ -1,1 +1,2 @@
-audio/tts.mp3
+audio/*
+cogs/__pycache__/*
